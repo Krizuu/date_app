@@ -104,6 +104,7 @@ export default function DateApp() {
   const [foodHovered, setFoodHovered] = useState(false)
   const [imgError, setImgError] = useState(false)
   const [shrekError, setShrekError] = useState(false)
+  const [mustangError, setMustangError] = useState(false)
   const [kevinError, setKevinError] = useState(false)
   const [michaelError, setMichaelError] = useState(false)
   const [catclockError, setCatclockError] = useState(false)
@@ -308,7 +309,7 @@ export default function DateApp() {
               />
             )}
             <h1 className="text-2xl font-bold text-[#5c1a1a] mb-6">
-              {isSibling ? 'Kiedy pasuje Ci spotkanko?' : 'No to kiedy idziemy moja Dua Lipo?'}
+              {isSibling ? 'Kiedy pasuje Ci spotkanko?' : 'No to... kiedy idziemy?'}
             </h1>
             <div className="text-left space-y-5 mb-6">
               <div>
@@ -401,7 +402,7 @@ export default function DateApp() {
         {screen === 'final' && (
           <>
             {shrekError ? (
-              <div className="w-32 h-32 rounded-full bg-amber-100 flex items-center justify-center text-5xl mx-auto mb-6 shadow-md">
+              <div className="w-44 h-44 rounded-2xl bg-amber-100 flex items-center justify-center text-5xl mx-auto mb-6 shadow-md">
                 {isSibling ? '🤝' : '😊'}
               </div>
             ) : (
@@ -410,14 +411,27 @@ export default function DateApp() {
                 src="/shrek.jpg"
                 alt="shrek"
                 onError={() => setShrekError(true)}
-                className="w-32 h-32 rounded-full mx-auto mb-6 object-cover shadow-md"
+                className="w-44 h-44 rounded-2xl mx-auto mb-6 object-cover shadow-md"
               />
             )}
             <h1 className="text-2xl font-bold text-[#5c1a1a] mb-2 leading-snug">
               {isSibling
-                ? `Siostra płaci, brat je 💗 Bądź gotowa ${formattedDate} o ${selectedTime}, przyjadę po Ciebie swoim batmobilem 🚗`
-                : `Dobrze że nie powiedziałaś nie, uff... nie pożałujesz :))) Bądź gotowa ${formattedDate} o ${selectedTime} Ty super ślicznotko 🚗`}
+                ? `Siostra płaci, brat je 💗 Bądź gotowa ${formattedDate} o ${selectedTime}, przyjadę po Ciebie swoim batmobilem`
+                : `Dobrze że nie powiedziałaś nie, nie pożałujesz. Bądź gotowa ${formattedDate} o ${selectedTime} Ty super ślicznotko 🚗`}
             </h1>
+            {isSibling && (
+              mustangError ? (
+                <div className="text-4xl mt-3">🚗💨</div>
+              ) : (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src="/mustang.gif"
+                  alt="batmobil"
+                  onError={() => setMustangError(true)}
+                  className="w-full rounded-2xl mx-auto mt-3 shadow-md"
+                />
+              )
+            )}
             <p className="text-gray-400 text-xs mt-5 italic">
               {isSibling
                 ? `P.S. normalni bracia piszą SMSy. Ja zrobiłam stronę w przerwie obiadowej, dla ciebie, siostra. nic wielkiego.`
