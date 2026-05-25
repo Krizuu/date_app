@@ -6,6 +6,7 @@ type Screen = 'name-input' | 'ask' | 'surprised' | 'schedule' | 'food' | 'final'
 
 const ALLOWED_NAMES = ['ania', 'aniula', 'ewa', 'ewula', 'justyna', 'juti', 'patrycja', 'pati']
 const SIBLING_NAMES = ['ania', 'aniula', 'ewa', 'ewula',]
+const KASIA_NAMES   = ['kasia', 'katarzyna']
 
 const FLOWERS = [
   { id: 0,  left: '2%',  top: '5%',  size: 14, delay: '0s',    dur: '1.8s' },
@@ -89,6 +90,7 @@ export default function DateApp() {
   const [name, setName] = useState('Pati')
   const [isSibling, setIsSibling] = useState(false)
   const [nameError, setNameError] = useState(false)
+  const [kasiaError, setKasiaError] = useState(false)
   const [noFixed, setNoFixed] = useState(false)
   const [noX, setNoX] = useState(0)
   const [noY, setNoY] = useState(0)
@@ -98,6 +100,7 @@ export default function DateApp() {
   const [yesHovered, setYesHovered] = useState(false)
   const [nameHovered, setNameHovered] = useState(false)
   const [scheduleHovered, setScheduleHovered] = useState(false)
+  const [scheduleClicked, setScheduleClicked] = useState(false)
   const [foodHovered, setFoodHovered] = useState(false)
   const [imgError, setImgError] = useState(false)
   const [shrekError, setShrekError] = useState(false)
@@ -124,10 +127,21 @@ export default function DateApp() {
       setName(trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase())
       setIsSibling(SIBLING_NAMES.includes(lower))
       setNameError(false)
+      setKasiaError(false)
       setScreen('ask')
+    } else if (KASIA_NAMES.includes(lower)) {
+      setKasiaError(true)
+      setNameError(false)
     } else {
       setNameError(true)
+      setKasiaError(false)
     }
+  }
+
+  const handleScheduleClick = () => {
+    setScheduleClicked(true)
+    setTimeout(() => setScheduleClicked(false), 800)
+    if (selectedDate && selectedTime) setScreen('food')
   }
 
   const formattedDate = selectedDate ? selectedDate.split('-').reverse().join('.') : ''
@@ -164,12 +178,12 @@ export default function DateApp() {
             <h1 className="text-2xl font-bold text-[#5c1a1a] mb-2 leading-snug">
               Podaj swoje imię słodziaku
             </h1>
-            <p className="text-gray-400 text-sm mb-6">żebym wiedział kto piszę 🥺</p>
+            <p className="text-gray-400 text-sm mb-6">żebym wiedział kto pisze 🥺</p>
             <div className="mb-4">
               <input
                 type="text"
                 value={nameInput}
-                onChange={(e) => { setNameInput(e.target.value); setNameError(false) }}
+                onChange={(e) => { setNameInput(e.target.value); setNameError(false); setKasiaError(false) }}
                 onKeyDown={(e) => { if (e.key === 'Enter') submitName() }}
                 placeholder="Twoje imię..."
                 className="w-full border-b-2 border-gray-200 focus:border-[#f4a7b9] py-2 px-1 text-center text-lg text-gray-700 bg-transparent outline-none transition-colors placeholder:text-gray-300"
@@ -179,6 +193,11 @@ export default function DateApp() {
               <p className="text-sm text-[#c0392b] mb-4 leading-snug">
                 Nie jesteś osobą, która mnie interesuje.<br />
                 Szukaj sobie innego księcia... 👑
+              </p>
+            )}
+            {kasiaError && (
+              <p className="text-sm text-[#c0392b] mb-4 leading-snug">
+                Ty nie masz tutaj wstępu, idź słuchać sobie piosenek Ewy i umów się z mężem... 💍
               </p>
             )}
             <div className="relative mt-2">
@@ -321,9 +340,9 @@ export default function DateApp() {
               </div>
             </div>
             <div className="relative">
-              <Hearts show={scheduleHovered && !!(selectedDate && selectedTime)} />
+              <Hearts show={scheduleHovered || scheduleClicked} />
               <button
-                onClick={() => { if (selectedDate && selectedTime) setScreen('food') }}
+                onClick={handleScheduleClick}
                 onMouseEnter={() => setScheduleHovered(true)}
                 onMouseLeave={() => setScheduleHovered(false)}
                 className={`w-full py-3 rounded-full font-semibold text-white transition-colors ${
@@ -397,7 +416,7 @@ export default function DateApp() {
             <h1 className="text-2xl font-bold text-[#5c1a1a] mb-2 leading-snug">
               {isSibling
                 ? `Siostra płaci, brat je 💗 Bądź gotowa ${formattedDate} o ${selectedTime}, przyjadę po Ciebie swoim batmobilem 🚗`
-                : `Dobrze że nie powiedziałaś nie, nie pożałujesz. Bądź gotowa ${formattedDate} o ${selectedTime} Ty super ślicznotko 🚗`}
+                : `Dobrze że nie powiedziałaś nie, uff... nie pożałujesz :))) Bądź gotowa ${formattedDate} o ${selectedTime} Ty super ślicznotko 🚗`}
             </h1>
             <p className="text-gray-400 text-xs mt-5 italic">
               {isSibling
