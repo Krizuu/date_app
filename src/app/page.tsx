@@ -4,9 +4,10 @@ import { useState, useCallback } from 'react'
 
 type Screen = 'name-input' | 'ask' | 'surprised' | 'schedule' | 'food' | 'final'
 
-const ALLOWED_NAMES = ['ania', 'aniula', 'ewa', 'ewula', 'justyna', 'juti', 'patrycja', 'pati']
-const SIBLING_NAMES = ['ania', 'aniula', 'ewa', 'ewula',]
+const ALLOWED_NAMES = ['ania', 'aniula', 'ewa', 'ewula', 'justyna', 'juti', 'patrycja', 'pati', 'gosia', 'małgorzata']
+const SIBLING_NAMES = ['ania', 'aniula', 'ewa', 'ewula']
 const KASIA_NAMES   = ['kasia', 'katarzyna']
+const BRO_NAMES     = ['cezary', 'bartek', 'zawier']
 
 const FLOWERS = [
   { id: 0,  left: '2%',  top: '5%',  size: 14, delay: '0s',    dur: '1.8s' },
@@ -45,6 +46,17 @@ const FLOWERS = [
   { id: 33, left: '72%', top: '78%', size: 18, delay: '1.4s',  dur: '2.2s' },
   { id: 34, left: '89%', top: '10%', size: 14, delay: '0.1s',  dur: '1.7s' },
   { id: 35, left: '10%', top: '95%', size: 16, delay: '0.7s',  dur: '1.5s' },
+  { id: 36, left: '16%', top: '80%', size: 14, delay: '0.6s',  dur: '2.0s' },
+  { id: 37, left: '33%', top: '35%', size: 16, delay: '0.2s',  dur: '1.8s' },
+  { id: 38, left: '55%', top: '55%', size: 12, delay: '0.8s',  dur: '1.6s' },
+  { id: 39, left: '72%', top: '78%', size: 18, delay: '1.4s',  dur: '2.2s' },
+  { id: 40, left: '89%', top: '10%', size: 14, delay: '0.1s',  dur: '1.7s' },
+  { id: 41, left: '15%', top: '12%', size: 16, delay: '1.7s',  dur: '1.1s' },
+  { id: 42, left: '10%', top: '52%', size: 16, delay: '0.4s',  dur: '1.5s' },
+  { id: 43, left: '56%', top: '34%', size: 16, delay: '0.7s',  dur: '2.5s' },
+  { id: 44, left: '15%', top: '85%', size: 16, delay: '1.7s',  dur: '1.5s' },
+  { id: 45, left: '23%', top: '54%', size: 16, delay: '0.3s',  dur: '1.3s' },
+  { id: 46, left: '68%', top: '12%', size: 16, delay: '0.7s',  dur: '2.5s' },
 ]
 
 const TIMES = [
@@ -91,6 +103,7 @@ export default function DateApp() {
   const [isSibling, setIsSibling] = useState(false)
   const [nameError, setNameError] = useState(false)
   const [kasiaError, setKasiaError] = useState(false)
+  const [broError, setBroError] = useState(false)
   const [noFixed, setNoFixed] = useState(false)
   const [noX, setNoX] = useState(0)
   const [noY, setNoY] = useState(0)
@@ -120,6 +133,8 @@ export default function DateApp() {
     setNoY(y)
   }, [])
 
+  const clearErrors = () => { setNameError(false); setKasiaError(false); setBroError(false) }
+
   const submitName = () => {
     const trimmed = nameInput.trim()
     if (!trimmed) return
@@ -127,15 +142,20 @@ export default function DateApp() {
     if (ALLOWED_NAMES.includes(lower)) {
       setName(trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase())
       setIsSibling(SIBLING_NAMES.includes(lower))
-      setNameError(false)
-      setKasiaError(false)
+      clearErrors()
       setScreen('ask')
     } else if (KASIA_NAMES.includes(lower)) {
       setKasiaError(true)
       setNameError(false)
+      setBroError(false)
+    } else if (BRO_NAMES.includes(lower)) {
+      setBroError(true)
+      setNameError(false)
+      setKasiaError(false)
     } else {
       setNameError(true)
       setKasiaError(false)
+      setBroError(false)
     }
   }
 
@@ -184,7 +204,7 @@ export default function DateApp() {
               <input
                 type="text"
                 value={nameInput}
-                onChange={(e) => { setNameInput(e.target.value); setNameError(false); setKasiaError(false) }}
+                onChange={(e) => { setNameInput(e.target.value); clearErrors() }}
                 onKeyDown={(e) => { if (e.key === 'Enter') submitName() }}
                 placeholder="Twoje imię..."
                 className="w-full border-b-2 border-gray-200 focus:border-[#f4a7b9] py-2 px-1 text-center text-lg text-gray-700 bg-transparent outline-none transition-colors placeholder:text-gray-300"
@@ -199,6 +219,12 @@ export default function DateApp() {
             {kasiaError && (
               <p className="text-sm text-[#c0392b] mb-4 leading-snug">
                 Ty nie masz tutaj wstępu, idź słuchać sobie piosenek Ewy i umów się z mężem... 💍
+              </p>
+            )}
+            {broError && (
+              <p className="text-sm text-[#c0392b] mb-4 leading-snug">
+                Love you, ale to apka nie dla nas tylko naszych lasek.<br />
+                Jak chcesz wyjść ze mną na kebsa to po prostu napisz :)))
               </p>
             )}
             <div className="relative mt-2">
@@ -434,7 +460,7 @@ export default function DateApp() {
             )}
             <p className="text-gray-400 text-xs mt-5 italic">
               {isSibling
-                ? `P.S. normalni bracia piszą SMSy. Ja zrobiłam stronę w przerwie obiadowej, dla ciebie, siostra. nic wielkiego.`
+                ? `P.S. Love ya sis 💗`
                 : `P.S. mam olbrzymie szczęście, że taka super bomba jak Ty mnie wybrała`}
             </p>
             <div className="flex justify-center gap-2 mt-6">
