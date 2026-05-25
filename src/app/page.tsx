@@ -4,8 +4,8 @@ import { useState, useCallback } from 'react'
 
 type Screen = 'name-input' | 'ask' | 'surprised' | 'schedule' | 'food' | 'final'
 
-const ALLOWED_NAMES = ['ania', 'ewa', 'justyna', 'juti', 'patrycja', 'pati']
-const SIBLING_NAMES = ['ania', 'ewa']
+const ALLOWED_NAMES = ['ania', 'aniula', 'ewa', 'ewula', 'justyna', 'juti', 'patrycja', 'pati']
+const SIBLING_NAMES = ['ania', 'aniula', 'ewa', 'ewula',]
 
 const FLOWERS = [
   { id: 0,  left: '2%',  top: '5%',  size: 14, delay: '0s',    dur: '1.8s' },
@@ -103,6 +103,7 @@ export default function DateApp() {
   const [shrekError, setShrekError] = useState(false)
   const [kevinError, setKevinError] = useState(false)
   const [michaelError, setMichaelError] = useState(false)
+  const [catclockError, setCatclockError] = useState(false)
 
   const moveNoButton = useCallback(() => {
     const pad = 60
@@ -128,6 +129,8 @@ export default function DateApp() {
       setNameError(true)
     }
   }
+
+  const formattedDate = selectedDate ? selectedDate.split('-').reverse().join('.') : ''
 
   return (
     <div className="relative min-h-screen overflow-hidden flex items-center justify-center p-4">
@@ -155,7 +158,7 @@ export default function DateApp() {
                 src="/kevin.jpg"
                 alt="to ja"
                 onError={() => setKevinError(true)}
-                className="w-24 h-24 rounded-full mx-auto mb-5 object-cover shadow-md"
+                className="w-32 h-32 rounded-full mx-auto mb-5 object-cover shadow-md"
               />
             )}
             <h1 className="text-2xl font-bold text-[#5c1a1a] mb-2 leading-snug">
@@ -200,7 +203,7 @@ export default function DateApp() {
         {screen === 'ask' && (
           <>
             {imgError ? (
-              <div className="w-28 h-28 rounded-2xl mx-auto mb-6 bg-pink-50 flex items-center justify-center text-6xl shadow-md">
+              <div className="w-36 h-36 rounded-2xl mx-auto mb-6 bg-pink-50 flex items-center justify-center text-6xl shadow-md">
                 🐾
               </div>
             ) : (
@@ -209,7 +212,7 @@ export default function DateApp() {
                 src="/cat.gif"
                 alt="słodki koteł"
                 onError={() => setImgError(true)}
-                className="w-28 h-28 rounded-2xl mx-auto mb-6 object-cover shadow-md"
+                className="w-36 h-36 rounded-2xl mx-auto mb-6 object-cover shadow-md"
               />
             )}
             <h1 className="text-2xl font-bold text-[#5c1a1a] mb-8 leading-snug">
@@ -249,7 +252,7 @@ export default function DateApp() {
                 src="/michael.gif"
                 alt="zaskoczony"
                 onError={() => setMichaelError(true)}
-                className="w-28 h-28 rounded-2xl mx-auto mb-4 object-cover shadow-md"
+                className="w-36 h-36 rounded-2xl mx-auto mb-4 object-cover shadow-md"
               />
             )}
             <h1 className="text-3xl font-extrabold text-[#5c1a1a] mb-2 uppercase leading-tight">
@@ -274,7 +277,17 @@ export default function DateApp() {
         {/* ── Ekran 3: Termin ── */}
         {screen === 'schedule' && (
           <>
-            <div className="text-5xl mb-4">📅🐾</div>
+            {catclockError ? (
+              <div className="text-5xl mb-4">📅🐾</div>
+            ) : (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src="/catclock.gif"
+                alt="cat clock"
+                onError={() => setCatclockError(true)}
+                className="w-32 h-32 rounded-2xl mx-auto mb-4 object-cover shadow-md"
+              />
+            )}
             <h1 className="text-2xl font-bold text-[#5c1a1a] mb-6">
               {isSibling ? 'Kiedy pasuje Ci spotkanko?' : 'No to... kiedy idziemy?'}
             </h1>
@@ -369,7 +382,7 @@ export default function DateApp() {
         {screen === 'final' && (
           <>
             {shrekError ? (
-              <div className="w-24 h-24 rounded-full bg-amber-100 flex items-center justify-center text-5xl mx-auto mb-6 shadow-md">
+              <div className="w-32 h-32 rounded-full bg-amber-100 flex items-center justify-center text-5xl mx-auto mb-6 shadow-md">
                 {isSibling ? '🤝' : '😊'}
               </div>
             ) : (
@@ -378,13 +391,13 @@ export default function DateApp() {
                 src="/shrek.jpg"
                 alt="shrek"
                 onError={() => setShrekError(true)}
-                className="w-24 h-24 rounded-full mx-auto mb-6 object-cover shadow-md"
+                className="w-32 h-32 rounded-full mx-auto mb-6 object-cover shadow-md"
               />
             )}
             <h1 className="text-2xl font-bold text-[#5c1a1a] mb-2 leading-snug">
               {isSibling
-                ? `Siostra płaci, brat je 💗 Bądź gotowa na 18, przyjadę po Ciebie swoim batmobilem 🚗`
-                : `Dobrze że nie powiedziałaś nie, nie pożałujesz. Bądź gotowa na 18 Ty super ślicznotko 🚗`}
+                ? `Siostra płaci, brat je 💗 Bądź gotowa ${formattedDate} o ${selectedTime}, przyjadę po Ciebie swoim batmobilem 🚗`
+                : `Dobrze że nie powiedziałaś nie, nie pożałujesz. Bądź gotowa ${formattedDate} o ${selectedTime} Ty super ślicznotko 🚗`}
             </h1>
             <p className="text-gray-400 text-xs mt-5 italic">
               {isSibling
