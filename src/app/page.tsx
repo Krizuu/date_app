@@ -308,7 +308,7 @@ export default function DateApp() {
               />
             )}
             <h1 className="text-2xl font-bold text-[#5c1a1a] mb-6">
-              {isSibling ? 'Kiedy pasuje Ci spotkanko?' : 'No to... kiedy idziemy?'}
+              {isSibling ? 'Kiedy pasuje Ci spotkanko?' : 'No to kiedy idziemy moja Dua Lipo?'}
             </h1>
             <div className="text-left space-y-5 mb-6">
               <div>
